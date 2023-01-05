@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+venv*/
+*.egg-info/
+
+# Anki
+build/
+ankidata/
+src/meta.json
+src/manifest.json
+src/user_files/media/*
+
+# General
+TODO.md

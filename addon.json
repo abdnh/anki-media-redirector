@@ -1,0 +1,7 @@
+{
+    "name": "Media Redirector",
+    "package": "media_redirector",
+    "homepage": "https://github.com/abdnh/anki-media-redirector",
+    "min_point_version": 50,
+    "ankiweb_id": ""
+}
