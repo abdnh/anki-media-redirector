@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import Any
 
@@ -12,13 +11,11 @@ from aqt.operations import QueryOp
 from aqt.qt import *
 
 ADDON_NAME = "Media Redirector"
-CONFIG = mw.addonManager.getConfig(__name__)
-redirected_patterns = [re.compile(p) for p in CONFIG["redirected_patterns"]]
 REDIRECTED_MEDIA_DIR = Path(__file__).parent / "user_files" / "media"
 
 
 def should_redirect(path: str) -> bool:
-    return any(pattern.match(path) for pattern in redirected_patterns)
+    return (REDIRECTED_MEDIA_DIR / path).exists()
 
 
 def redirect_media_request(
@@ -36,11 +33,7 @@ def redirect_media_request(
 def remove_redirected() -> None:
     def op(col: Collection) -> None:
         for path in Path(col.media.dir()).iterdir():
-            if (
-                path.is_file()
-                and should_redirect(path.name)
-                and (REDIRECTED_MEDIA_DIR / path.name).exists()
-            ):
+            if path.is_file() and should_redirect(path.name):
                 os.remove(path)
 
     QueryOp(parent=mw, op=op, success=lambda _: ()).run_in_background()
