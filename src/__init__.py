@@ -5,6 +5,7 @@ from typing import Any
 
 from anki import hooks
 from anki.collection import Collection
+from anki.utils import pointVersion
 from aqt import appVersion, mediasrv, mw
 from aqt.mediasrv import BundledFileRequest, DynamicRequest, LocalFileRequest, NotFound
 from aqt.operations import QueryOp
@@ -13,8 +14,6 @@ from aqt.utils import tooltip
 
 ADDON_NAME = "Media Redirector"
 REDIRECTED_MEDIA_DIR = Path(__file__).parent / "user_files" / "media"
-ANKI_VERSION = tuple(int(p) for p in appVersion.split("."))
-
 
 def should_redirect(path: str) -> bool:
     return (REDIRECTED_MEDIA_DIR / path).exists()
@@ -45,7 +44,7 @@ def remove_redirected() -> None:
         tooltip(f"Removed {count} files", parent=mw)
 
     query_op = QueryOp(parent=mw, op=op, success=on_success)
-    if ANKI_VERSION >= (2, 1, 50):
+    if pointVersion() >= 50:
         # with_progress() was broken until 2.1.50
         query_op = query_op.with_progress()
     query_op.run_in_background()
